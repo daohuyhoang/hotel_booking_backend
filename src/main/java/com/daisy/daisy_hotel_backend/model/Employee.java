@@ -20,7 +20,7 @@ public class Employee {
     @Column(name = "salary", precision = 10, scale = 2)
     private BigDecimal salary;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

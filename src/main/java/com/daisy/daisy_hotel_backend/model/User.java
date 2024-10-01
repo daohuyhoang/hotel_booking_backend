@@ -2,14 +2,18 @@ package com.daisy.daisy_hotel_backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "users")
 @Data
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "users")
 public class User {
 
     @Id
@@ -33,10 +37,12 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -46,8 +52,4 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

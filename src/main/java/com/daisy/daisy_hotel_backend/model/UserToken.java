@@ -2,11 +2,15 @@ package com.daisy.daisy_hotel_backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "user_tokens")
 public class UserToken {
 
@@ -19,17 +23,15 @@ public class UserToken {
     private String token;
 
     @Column(name = "expires_at", nullable = false)
+    @CreatedDate
     private LocalDateTime expiresAt;
 
     @Column(name = "created_at", nullable = false, updatable = false)
+    @LastModifiedDate
     private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
 }

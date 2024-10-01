@@ -131,6 +131,7 @@ CREATE TABLE bookings
     payment_status           ENUM ('NOT_PAID', 'PARTIALLY_PAID', 'PAID')             DEFAULT 'NOT_PAID',
     estimated_check_out_date DATE,                                                                      -- Ngày trả phòng dự kiến (dành cho những khách lưu trú dài hạn)
     note                     TEXT,
+    deposit_amount           DECIMAL(10, 2)                                          DEFAULT 0.0,
     created_at               TIMESTAMP                                               DEFAULT CURRENT_TIMESTAMP,
     updated_at               TIMESTAMP                                               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (user_id),
