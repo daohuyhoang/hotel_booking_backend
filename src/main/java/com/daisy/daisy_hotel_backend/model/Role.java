@@ -17,8 +17,8 @@ public class Role {
     private Long roleId;
 
     @Column(name = "role_name", nullable = false, unique = true, length = 50)
-    private String roleName;
+    private String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<User> users = new HashSet<>();
+//    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<User> users = new HashSet<>();
 }
