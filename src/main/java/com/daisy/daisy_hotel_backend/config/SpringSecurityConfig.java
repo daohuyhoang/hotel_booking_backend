@@ -38,14 +38,14 @@ public class SpringSecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> {
-//                    authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
-//                    authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
-//                    authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
-//                    authorize.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
-//                    authorize.requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole("ADMIN", "USER");
-//                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
-                    authorize.requestMatchers("/api/auth/**").permitAll();
-                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+                    // Các API công khai không yêu cầu xác thực
+                    authorize.requestMatchers("/api/public/**", "/api/auth/**").permitAll();
+
+                    authorize.requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN");
+
+                    authorize.requestMatchers("/api/user/**").hasAuthority("ROLE_USER");
+
+                    // Các API khác yêu cầu phải đăng nhập
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
 
@@ -61,22 +61,4 @@ public class SpringSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService(){
-//
-//        UserDetails ramesh = User.builder()
-//                .username("ramesh")
-//                .password(passwordEncoder().encode("password"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(ramesh, admin);
-//    }
 }
