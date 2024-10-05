@@ -8,20 +8,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @AllArgsConstructor
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private AuthService authService;
 
-    // Build Login REST API
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
+        Set<String> roles = authService.getUserRoles(loginDto);
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setAccessToken(token);
+        jwtAuthResponse.setRoles(roles);
 
         return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
     }

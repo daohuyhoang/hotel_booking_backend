@@ -1,7 +1,7 @@
 package com.daisy.daisy_hotel_backend.service;
 
 import com.daisy.daisy_hotel_backend.model.User;
-import com.daisy.daisy_hotel_backend.repository.UseRepository;
+import com.daisy.daisy_hotel_backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UseRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
