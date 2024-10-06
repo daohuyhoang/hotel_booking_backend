@@ -1,6 +1,7 @@
 package com.daisy.daisy_hotel_backend.security;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class JwtTokenProvider {
                 .subject(username)
                 .issuedAt(new Date())
                 .expiration(expireDate)
-                .signWith(key())
+                .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
 
         return token;
