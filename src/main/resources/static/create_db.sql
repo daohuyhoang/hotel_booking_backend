@@ -63,15 +63,23 @@ CREATE TABLE employees
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
--- Bảng hotels: Lưu thông tin khách sạn
+-- Bảng cities: Lưu thông tin các thành phố
+CREATE TABLE cities
+(
+    city_id   BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name      VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Bảng hotels: Thay đổi để liên kết với bảng cities
 CREATE TABLE hotels
 (
-    hotel_id     BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name         VARCHAR(100) NOT NULL,
-    address      VARCHAR(255),
-    city         VARCHAR(100),
+    hotel_id  BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name      VARCHAR(100) NOT NULL,
+    address   VARCHAR(255),
+    city_id   BIGINT,
     phone_number VARCHAR(10),
-    email        VARCHAR(100)
+    email     VARCHAR(100),
+    FOREIGN KEY (city_id) REFERENCES cities (city_id)
 );
 
 -- Bảng hotel_images: Lưu thông tin hình ảnh liên kết với khách sạn

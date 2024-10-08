@@ -32,6 +32,10 @@ public class Room {
     @Column(columnDefinition = "ENUM('AVAILABLE', 'BOOKED', 'OUT_OF_SERVICE') default 'AVAILABLE'")
     private RoomStatus availabilityStatus = RoomStatus.AVAILABLE;
 
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private Hotel hotel;
+
     @Lob
     private String description;
 

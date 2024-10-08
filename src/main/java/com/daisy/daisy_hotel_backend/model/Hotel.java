@@ -3,6 +3,8 @@ package com.daisy.daisy_hotel_backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "hotels")
 @Data
@@ -19,12 +21,16 @@ public class Hotel {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "city", length = 100)
-    private String city;
-
     @Column(name = "phone_number", length = 10)
     private String phoneNumber;
 
     @Column(name = "email", length = 100)
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id", nullable = false)
+    private City city;
+
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Room> rooms;
 }
