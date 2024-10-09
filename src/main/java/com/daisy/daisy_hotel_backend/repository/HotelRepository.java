@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
-    @Query("SELECT h FROM Hotel h " +
-            "JOIN h.rooms r " +
-            "WHERE h.city.cityId = :cityId AND r.availabilityStatus = 'AVAILABLE' AND " +
+    @Query("SELECT DISTINCT r.hotel FROM Room r " +
+            "WHERE (:cityId IS NULL OR r.hotel.city.cityId = :cityId) AND " +
+            "r.availabilityStatus = 'AVAILABLE' AND " +
             "NOT EXISTS (SELECT 1 FROM Booking b " +
             "            WHERE b.room.roomId = r.roomId AND " +
             "                  b.checkInDate <= :checkoutDate AND b.checkOutDate >= :checkinDate)")

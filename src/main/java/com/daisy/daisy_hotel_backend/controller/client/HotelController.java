@@ -23,10 +23,10 @@ public class HotelController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/search")
     public ResponseEntity<List<Hotel>> searchRooms(
-            @RequestParam String cityId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkinDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkoutDate) {
-        List<Hotel> rooms = hotelService.searchHotels(cityId, checkinDate, checkoutDate);
-        return new ResponseEntity<>(rooms, HttpStatus.OK);
+            @RequestParam(required = false) String cityId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkinDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkoutDate) {
+        List<Hotel> hotels = hotelService.searchHotels(cityId, checkinDate, checkoutDate);
+        return new ResponseEntity<>(hotels, HttpStatus.OK);
     }
 }

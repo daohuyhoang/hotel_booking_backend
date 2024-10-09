@@ -33,9 +33,9 @@ VALUES ('Hà Nội'),
        ('Hội An');
 
 INSERT INTO hotels (name, address, phone_number, email, city_id)
-VALUES ('Khách sạn Mặt Trời', 'Số 1, Đường Phạm Văn Đồng, Hà Nội', '0123456789', 'mattroi@hotel.vn', 1),
-       ('Khách sạn Biển Xanh', 'Số 10, Đường Trần Phú, Nha Trang', '0987654321', 'bienxanh@hotel.vn', 4),
-       ('Khách sạn Hoa Sen', 'Số 15, Đường Nguyễn Văn Linh, Đà Nẵng', '0912345678', 'hoasen@hotel.vn', 3),
+VALUES ('Khách sạn Mặt Trời', 'Số 1, Đường Phạm Văn Đồng', '0123456789', 'mattroi@hotel.vn', 1),
+       ('Khách sạn Biển Xanh', 'Số 10, Đường Trần Phú,', '0987654321', 'bienxanh@hotel.vn', 1),
+       ('Khách sạn Hoa Sen', 'Số 15, Đường Nguyễn Văn Linh', '0912345678', 'hoasen@hotel.vn', 1),
        ('Khách sạn Sài Gòn', 'Số 99, Đường Lý Thường Kiệt, TP. Hồ Chí Minh', '0934567890', 'saigon@hotel.vn', 2),
        ('Khách sạn Hội An Xưa', 'Số 20, Đường Trần Phú, Hội An', '0923456789', 'hoianxua@hotel.vn', 5);
 INSERT INTO rooms (room_number, type, price, capacity, availability_status, description, hotel_id)

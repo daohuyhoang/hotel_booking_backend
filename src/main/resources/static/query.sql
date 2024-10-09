@@ -16,6 +16,6 @@ AND r.availability_status = 'AVAILABLE'
     SELECT 1
     FROM bookings b
     WHERE b.room_id = r.room_id
-      AND b.check_in_date <= '2024-10-15'
-      AND b.check_out_date >= '2024-10-10'
+      AND b.check_in_date <= '2024-10-15T14:00:00'
+      AND b.check_out_date >= '2024-10-10T14:00:00'
 );
