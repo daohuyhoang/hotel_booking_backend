@@ -24,9 +24,10 @@ public class HotelController {
     @GetMapping("/search")
     public ResponseEntity<List<Hotel>> searchRooms(
             @RequestParam(required = false) String cityId,
+            @RequestParam(required = false) Integer capacity,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkinDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkoutDate) {
-        List<Hotel> hotels = hotelService.searchHotels(cityId, checkinDate, checkoutDate);
+        List<Hotel> hotels = hotelService.searchHotels(cityId, capacity, checkinDate, checkoutDate);
         return new ResponseEntity<>(hotels, HttpStatus.OK);
     }
 }

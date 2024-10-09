@@ -16,7 +16,7 @@ public class RoomServiceImpl implements RoomService {
     private RoomRepository roomRepository;
 
     @Override
-    public List<Room> findAvailableRooms(Long hotelId, LocalDateTime checkInDate, LocalDateTime checkOutDate) {
-        return roomRepository.findAvailableRooms(hotelId, checkInDate, checkOutDate);
+    public List<Room> findAvailableRooms(Long hotelId, Integer capacity, LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+        return roomRepository.findAvailableRooms(hotelId, capacity, checkInDate, checkOutDate);
     }
 }

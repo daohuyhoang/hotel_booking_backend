@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface HotelService{
-    List<Hotel> searchHotels(String cityId, LocalDateTime checkinDate, LocalDateTime checkoutDate);
+    List<Hotel> searchHotels(String cityId, Integer capacity, LocalDateTime checkinDate, LocalDateTime checkoutDate);
 }

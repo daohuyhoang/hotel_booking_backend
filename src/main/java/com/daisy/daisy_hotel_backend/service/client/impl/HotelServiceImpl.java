@@ -16,7 +16,7 @@ public class HotelServiceImpl implements HotelService {
     private HotelRepository hotelRepository;
 
     @Override
-    public List<Hotel> searchHotels(String cityId, LocalDateTime checkinDate, LocalDateTime checkoutDate) {
-        return hotelRepository.searchHotels(cityId, checkinDate, checkoutDate);
+    public List<Hotel> searchHotels(String cityId, Integer capacity, LocalDateTime checkinDate, LocalDateTime checkoutDate) {
+        return hotelRepository.searchHotels(cityId, capacity, checkinDate, checkoutDate);
     }
 }
