@@ -1,6 +1,6 @@
 package com.daisy.daisy_hotel_backend.service;
 
-import com.daisy.daisy_hotel_backend.dto.LoginDto;
+import com.daisy.daisy_hotel_backend.dto.request.LoginDto;
 
 import java.util.Set;
 

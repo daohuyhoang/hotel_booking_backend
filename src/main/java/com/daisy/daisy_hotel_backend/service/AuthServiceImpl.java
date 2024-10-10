@@ -1,12 +1,11 @@
 package com.daisy.daisy_hotel_backend.service;
 
-import com.daisy.daisy_hotel_backend.dto.LoginDto;
+import com.daisy.daisy_hotel_backend.dto.request.LoginDto;
 import com.daisy.daisy_hotel_backend.model.Role;
 import com.daisy.daisy_hotel_backend.model.User;
 import com.daisy.daisy_hotel_backend.repository.UserRepository;
 import com.daisy.daisy_hotel_backend.security.JwtTokenProvider;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

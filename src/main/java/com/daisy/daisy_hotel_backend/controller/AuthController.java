@@ -1,7 +1,7 @@
 package com.daisy.daisy_hotel_backend.controller;
 
 import com.daisy.daisy_hotel_backend.dto.JwtAuthResponse;
-import com.daisy.daisy_hotel_backend.dto.LoginDto;
+import com.daisy.daisy_hotel_backend.dto.request.LoginDto;
 import com.daisy.daisy_hotel_backend.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
