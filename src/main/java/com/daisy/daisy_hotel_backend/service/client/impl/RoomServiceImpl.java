@@ -1,6 +1,7 @@
 package com.daisy.daisy_hotel_backend.service.client.impl;
 
 import com.daisy.daisy_hotel_backend.dto.request.RoomDTO;
+import com.daisy.daisy_hotel_backend.exception.InvalidCheckinDateException;
 import com.daisy.daisy_hotel_backend.model.Room;
 import com.daisy.daisy_hotel_backend.repository.RoomRepository;
 import com.daisy.daisy_hotel_backend.service.client.RoomService;
@@ -23,6 +24,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDTO> findAvailableRooms(Long hotelId, Integer capacity, LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+        if (checkInDate != null && checkInDate.isBefore(LocalDateTime.now())) {
+            throw new InvalidCheckinDateException("Check-in date must be today or after the current date");
+        }
         List<Room> availableRooms = roomRepository.findAvailableRooms(hotelId, capacity, checkInDate, checkOutDate);
         return availableRooms.stream()
                 .map(room -> modelMapper.map(room, RoomDTO.class))

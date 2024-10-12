@@ -22,7 +22,7 @@ public class HotelController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/search")
-    public ResponseEntity<List<HotelDTO>> searchRooms(
+    public ResponseEntity<List<HotelDTO>> searchHotels(
             @RequestParam(required = false) String cityId,
             @RequestParam(required = false) Integer capacity,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkinDate,
