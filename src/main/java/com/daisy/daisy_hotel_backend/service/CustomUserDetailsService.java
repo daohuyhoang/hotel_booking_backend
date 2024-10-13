@@ -1,5 +1,6 @@
 package com.daisy.daisy_hotel_backend.service;
 
+import com.daisy.daisy_hotel_backend.model.CustomUserDetail;
 import com.daisy.daisy_hotel_backend.model.User;
 import com.daisy.daisy_hotel_backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
 
-        return new org.springframework.security.core.userdetails.User(
+        return new CustomUserDetail(
+                user.getUserId(),
                 usernameOrEmail,
                 user.getPassword(),
                 authorities
