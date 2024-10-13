@@ -17,6 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class BookingServiceImpl implements BookingService {
 
@@ -30,28 +33,35 @@ public class BookingServiceImpl implements BookingService {
     private UserRepository userRepository;
 
     @Override
-    public Booking createBooking(BookingRequest bookingRequest) {
-        Room room = roomRepository.findById(bookingRequest.getRoomId())
-                .orElseThrow(() -> new RuntimeException("Room not found"));
-        if (room.getAvailabilityStatus() != RoomStatus.AVAILABLE) {
-            throw new IllegalStateException("Room is not available for booking");
-        }
+    public List<Booking> createBooking(BookingRequest bookingRequest) {
+
+        List<Booking> savedBookings = new ArrayList<>();
 
         User user = getUserByCustomUserDetail();
 
-        Booking booking = new Booking();
-        booking.setUser(user);
-        booking.setRoom(room);
-        booking.setCheckInDate(bookingRequest.getCheckinDate());
-        booking.setCheckOutDate(bookingRequest.getCheckoutDate());
-        booking.setStatus(BookingStatus.PENDING);
-        booking.setPaymentStatus(BookingPaymentStatus.NOT_PAID);
+        for (Long roomId : bookingRequest.getRoomId()) {
+            Room room = roomRepository.findById(roomId)
+                    .orElseThrow(() -> new RuntimeException("Room not found"));
+            if (room.getAvailabilityStatus() != RoomStatus.AVAILABLE) {
+                throw new IllegalStateException("Room is not available for booking");
+            }
 
-        Booking savedBooking = bookingRepository.save(booking);
+            Booking booking = new Booking();
+            booking.setUser(user);
+            booking.setRoom(room);
+            booking.setCheckInDate(bookingRequest.getCheckinDate());
+            booking.setCheckOutDate(bookingRequest.getCheckoutDate());
+            booking.setStatus(BookingStatus.PENDING);
+            booking.setPaymentStatus(BookingPaymentStatus.NOT_PAID);
 
-        room.setAvailabilityStatus(RoomStatus.BOOKED);
-        roomRepository.save(room);
-        return savedBooking;
+            Booking savedBooking = bookingRepository.save(booking);
+            savedBookings.add(savedBooking);
+
+            room.setAvailabilityStatus(RoomStatus.BOOKED);
+            roomRepository.save(room);
+        }
+
+        return savedBookings;
     }
 
     private User getUserByCustomUserDetail() {
