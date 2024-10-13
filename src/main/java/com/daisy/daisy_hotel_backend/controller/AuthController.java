@@ -2,7 +2,10 @@ package com.daisy.daisy_hotel_backend.controller;
 
 import com.daisy.daisy_hotel_backend.dto.JwtAuthResponse;
 import com.daisy.daisy_hotel_backend.dto.request.LoginDto;
+import com.daisy.daisy_hotel_backend.security.JwtAuthenticationFilter;
+import com.daisy.daisy_hotel_backend.security.TokenBlackList;
 import com.daisy.daisy_hotel_backend.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,10 @@ public class AuthController {
 
     private AuthService authService;
 
+    private TokenBlackList tokenBlackList;
+
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> login(@Valid @RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
@@ -31,6 +38,17 @@ public class AuthController {
         jwtAuthResponse.setRoles(roles);
 
         return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        System.out.println(token);
+        if (token != null){
+            tokenBlackList.blackListToken(token);
+            System.out.println(token);
+        }
+        return new ResponseEntity<>("Logout successful", HttpStatus.OK);
     }
 
 }

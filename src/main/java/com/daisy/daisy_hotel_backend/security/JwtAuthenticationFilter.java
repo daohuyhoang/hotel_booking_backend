@@ -20,13 +20,16 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
+    private final TokenBlackList tokenBlackList;
+
+    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService, TokenBlackList tokenBlackList) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userDetailsService = userDetailsService;
+        this.tokenBlackList = tokenBlackList;
     }
 
     @Override
@@ -39,6 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Validate Token
         if(StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)){
+
+            if (tokenBlackList.isTokenBlackListed(token)){
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Token has been blacklisted");
+                return;
+            }
             // get username from token
             String username = jwtTokenProvider.getUsername(token);
 
@@ -58,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getTokenFromRequest(HttpServletRequest request){
+    public String getTokenFromRequest(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
 
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
