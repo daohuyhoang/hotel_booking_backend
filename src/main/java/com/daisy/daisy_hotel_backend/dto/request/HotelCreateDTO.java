@@ -2,11 +2,13 @@ package com.daisy.daisy_hotel_backend.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,8 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HotelDTO implements BaseHotelDTO{
-
+public class HotelCreateDTO implements BaseHotelDTO{
     private Long hotelId;
 
     @NotBlank(message = "Hotel name cannot be blank")
@@ -32,5 +33,10 @@ public class HotelDTO implements BaseHotelDTO{
     @Size(max = 100, message = "Email must not exceed 100 characters")
     private String email;
 
-    private List<String> imageUrls;
+    @NotNull(message = "City is required")
+    private Long cityId;
+
+    private List<MultipartFile> hotelImages;
+
+    private List<RoomDTO> rooms;
 }

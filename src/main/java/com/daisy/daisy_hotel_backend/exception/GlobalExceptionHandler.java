@@ -1,6 +1,7 @@
 package com.daisy.daisy_hotel_backend.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -91,6 +92,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 errorMessage.toString().trim()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    // Xử lý lỗi không tìm thấy tài nguyên
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                new Date(),
+                HttpStatus.NOT_FOUND.value(),
+                request.getRequestURI(),
+                "Resource Not Found",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
