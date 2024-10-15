@@ -30,4 +30,7 @@ public class Hotel {
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)
     private City city;
+
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
+    private List<HotelImage> hotelImages;
 }
