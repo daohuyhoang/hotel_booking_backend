@@ -3,6 +3,7 @@ package com.daisy.daisy_hotel_backend.controller.admin;
 import com.daisy.daisy_hotel_backend.dto.response.HotelResponseDTO;
 import com.daisy.daisy_hotel_backend.service.admin.HotelAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +25,6 @@ public class HotelAdminController {
     @GetMapping
     public ResponseEntity<List<HotelResponseDTO>> getAllHotels() {
         List<HotelResponseDTO> hotels = hotelAdminService.getAllHotels();
-        return ResponseEntity.ok(hotels);
+        return new ResponseEntity<>(hotels, HttpStatus.OK);
     }
 }

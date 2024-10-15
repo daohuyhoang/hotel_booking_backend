@@ -1,4 +1,4 @@
-package com.daisy.daisy_hotel_backend.dto;
+package com.daisy.daisy_hotel_backend.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

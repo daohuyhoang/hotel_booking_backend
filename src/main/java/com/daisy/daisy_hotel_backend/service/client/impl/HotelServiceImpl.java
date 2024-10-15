@@ -3,6 +3,8 @@ package com.daisy.daisy_hotel_backend.service.client.impl;
 import com.daisy.daisy_hotel_backend.dto.request.HotelDTO;
 import com.daisy.daisy_hotel_backend.exception.InvalidCheckinDateException;
 import com.daisy.daisy_hotel_backend.model.Hotel;
+import com.daisy.daisy_hotel_backend.model.HotelImage;
+import com.daisy.daisy_hotel_backend.repository.HotelImageRepository;
 import com.daisy.daisy_hotel_backend.repository.HotelRepository;
 import com.daisy.daisy_hotel_backend.service.client.HotelService;
 import org.modelmapper.ModelMapper;
@@ -22,14 +24,26 @@ public class HotelServiceImpl implements HotelService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private HotelImageRepository hotelImageRepository;
+
     @Override
     public List<HotelDTO> searchHotels(String cityId, Integer capacity, LocalDateTime checkinDate, LocalDateTime checkoutDate) {
         if (checkinDate != null && checkinDate.isBefore(LocalDateTime.now())) {
             throw new InvalidCheckinDateException("Check-in date must be today or after the current date");
         }
         List<Hotel> hotels = hotelRepository.searchHotels(cityId, capacity, checkinDate, checkoutDate);
-        return hotels.stream()
-                .map(hotel -> modelMapper.map(hotel, HotelDTO.class))
-                .collect(Collectors.toList());
+
+        return hotels.stream().map(hotel -> {
+            HotelDTO hotelDTO = modelMapper.map(hotel, HotelDTO.class);
+
+            List<String> imageUrls = hotelImageRepository.findByHotel(hotel)
+                    .stream()
+                    .map(HotelImage::getImageUrl)
+                    .collect(Collectors.toList());
+
+            hotelDTO.setImageUrls(imageUrls);
+            return hotelDTO;
+        }).collect(Collectors.toList());
     }
 }
