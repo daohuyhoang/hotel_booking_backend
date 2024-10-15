@@ -31,11 +31,10 @@ public class HotelAdminController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<Hotel> createHotel(
+    public ResponseEntity<String> createHotel(
             @RequestPart(value = "hotel") @Valid HotelCreateDTO hotelCreateDTO,
             @RequestPart(value = "hotelImages", required = false) List<MultipartFile> images) {
-        Hotel createdHotel = hotelAdminService.createHotel(hotelCreateDTO, images);
-
-        return new ResponseEntity<>(createdHotel, HttpStatus.CREATED);
+        hotelAdminService.createHotel(hotelCreateDTO, images);
+        return new ResponseEntity<>("Hotel created successfully", HttpStatus.CREATED);
     }
 }
