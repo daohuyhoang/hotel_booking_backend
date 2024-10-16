@@ -9,11 +9,13 @@ import com.daisy.daisy_hotel_backend.model.HotelImage;
 import com.daisy.daisy_hotel_backend.repository.CityRepository;
 import com.daisy.daisy_hotel_backend.repository.HotelImageRepository;
 import com.daisy.daisy_hotel_backend.repository.HotelRepository;
+import com.daisy.daisy_hotel_backend.service.admin.CloudinaryService;
 import com.daisy.daisy_hotel_backend.service.admin.HotelAdminService;
 import com.daisy.daisy_hotel_backend.service.admin.ImageUploader;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -33,6 +35,9 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Autowired
     private ImageUploader imageUploader;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -55,6 +60,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Hotel createHotel(HotelCreateDTO hotelCreateDTO, List<MultipartFile> images) {
         City city = cityRepository.findById(hotelCreateDTO.getCityId())
                 .orElseThrow(() -> new ResourceNotFoundException("City not found"));
@@ -67,7 +73,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
         if (images != null && !images.isEmpty()) {
             for (MultipartFile imageFile : images) {
 
-                String uploadedImagePath = imageUploader.uploadImage(imageFile);
+                String uploadedImagePath = cloudinaryService.uploadImage(imageFile);
 
                 HotelImage hotelImage = new HotelImage();
                 hotelImage.setHotel(savedHotel);

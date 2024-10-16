@@ -38,5 +38,4 @@ public class HotelCreateDTO implements BaseHotelDTO{
 
     private List<MultipartFile> hotelImages;
 
-    private List<RoomDTO> rooms;
 }
