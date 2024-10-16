@@ -11,7 +11,6 @@ import com.daisy.daisy_hotel_backend.repository.HotelImageRepository;
 import com.daisy.daisy_hotel_backend.repository.HotelRepository;
 import com.daisy.daisy_hotel_backend.service.admin.CloudinaryService;
 import com.daisy.daisy_hotel_backend.service.admin.HotelAdminService;
-import com.daisy.daisy_hotel_backend.service.admin.ImageUploader;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +31,6 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Autowired
     private HotelImageRepository hotelImageRepository;
-
-    @Autowired
-    private ImageUploader imageUploader;
 
     @Autowired
     private CloudinaryService cloudinaryService;
