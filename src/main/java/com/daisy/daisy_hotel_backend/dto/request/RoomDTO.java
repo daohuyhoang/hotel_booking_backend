@@ -4,13 +4,14 @@ import com.daisy.daisy_hotel_backend.model.enums.RoomStatus;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomDTO {
+public class RoomDTO implements Serializable {
     private Long roomId;
 
     @NotBlank(message = "Room number must be not blank")

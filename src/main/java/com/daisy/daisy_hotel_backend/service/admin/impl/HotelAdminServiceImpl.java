@@ -57,7 +57,7 @@ public class HotelAdminServiceImpl implements HotelAdminService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Hotel createHotel(HotelCreateDTO hotelCreateDTO, List<MultipartFile> images) {
+    public void createHotel(HotelCreateDTO hotelCreateDTO, List<MultipartFile> images) {
         City city = cityRepository.findById(hotelCreateDTO.getCityId())
                 .orElseThrow(() -> new ResourceNotFoundException("City not found"));
 
@@ -78,6 +78,5 @@ public class HotelAdminServiceImpl implements HotelAdminService {
                 hotelImageRepository.save(hotelImage);
             }
         }
-        return savedHotel;
     }
 }

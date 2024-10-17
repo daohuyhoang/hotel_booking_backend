@@ -23,6 +23,7 @@ public class CacheConfig{
 
         // set TTl cho từng cache
         cacheConfigurations.put("hotels", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)));
+        cacheConfigurations.put("rooms", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(20)));
 
         return RedisCacheManager
                 .builder(redisConnectionFactory)
