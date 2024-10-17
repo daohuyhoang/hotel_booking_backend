@@ -1,5 +1,6 @@
 package com.daisy.daisy_hotel_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,5 +33,6 @@ public class Hotel {
     private City city;
 
     @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<HotelImage> hotelImages;
 }

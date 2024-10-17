@@ -1,6 +1,7 @@
 package com.daisy.daisy_hotel_backend.service.client.impl;
 
 import com.daisy.daisy_hotel_backend.dto.request.BookingRequest;
+import com.daisy.daisy_hotel_backend.exception.ResourceNotFoundException;
 import com.daisy.daisy_hotel_backend.model.Booking;
 import com.daisy.daisy_hotel_backend.model.CustomUserDetail;
 import com.daisy.daisy_hotel_backend.model.Room;
@@ -13,6 +14,7 @@ import com.daisy.daisy_hotel_backend.repository.RoomRepository;
 import com.daisy.daisy_hotel_backend.repository.UserRepository;
 import com.daisy.daisy_hotel_backend.service.client.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
     private UserRepository userRepository;
 
     @Override
+    @CacheEvict(value = "rooms", allEntries = true)
     public List<Booking> createBooking(BookingRequest bookingRequest) {
 
         List<Booking> savedBookings = new ArrayList<>();
@@ -41,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
 
         for (Long roomId : bookingRequest.getRoomId()) {
             Room room = roomRepository.findById(roomId)
-                    .orElseThrow(() -> new RuntimeException("Room not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
             if (room.getAvailabilityStatus() != RoomStatus.AVAILABLE) {
                 throw new IllegalStateException("Room is not available for booking");
             }
@@ -69,6 +72,6 @@ public class BookingServiceImpl implements BookingService {
         CustomUserDetail userDetail = (CustomUserDetail) auth.getPrincipal();
         Long userId = userDetail.getUserId();
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
