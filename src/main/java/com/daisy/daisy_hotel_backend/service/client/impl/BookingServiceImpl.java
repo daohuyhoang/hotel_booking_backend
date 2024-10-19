@@ -19,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -34,11 +33,6 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private RedisTemplate<String, Object> redisTemplate;
-//
-//    private final long PAYMENT_TTL = 60;
-
     @Override
     @CacheEvict(value = "rooms", allEntries = true)
     @Transactional
@@ -50,18 +44,28 @@ public class BookingServiceImpl implements BookingService {
             throw new RuntimeException("Some rooms were not found.");
         }
 
+        checkRoomBooked(bookingRequest, rooms);
+
         Booking booking = new Booking();
         booking.setUser(user);
         booking.setRooms(rooms);
         booking.setCheckInDate(bookingRequest.getCheckinDate());
         booking.setCheckOutDate(bookingRequest.getCheckoutDate());
-
         booking.setStatus(BookingStatus.PENDING);
         booking.setPaymentStatus(BookingPaymentStatus.NOT_PAID);
 
         return bookingRepository.save(booking);
     }
 
+    private void checkRoomBooked(BookingRequest bookingRequest, List<Room> rooms) {
+        for (Room room : rooms) {
+            boolean isRoomBooked = bookingRepository.isRoomBooked(room.getRoomId()
+                    , bookingRequest.getCheckinDate(), bookingRequest.getCheckoutDate());
+            if (isRoomBooked) {
+                throw new RuntimeException("Room " + room.getRoomNumber() + " is already booked during the selected dates.");
+            }
+        }
+    }
 
     private User getUserByCustomUserDetail() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
