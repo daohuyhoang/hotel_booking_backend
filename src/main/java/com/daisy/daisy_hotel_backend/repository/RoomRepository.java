@@ -16,7 +16,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             "(:capacity IS NULL OR r.capacity >= :capacity) AND " +
             "NOT EXISTS (" +
             "   SELECT 1 FROM Booking b " +
-            "   WHERE b.room.roomId = r.roomId AND b.checkInDate <= :checkOutDate AND b.checkOutDate >= :checkInDate" +
+            "   JOIN b.rooms br " +
+            "   WHERE br.roomId = r.roomId AND b.checkInDate <= :checkOutDate AND b.checkOutDate >= :checkInDate" +
             ")")
     List<Room> findAvailableRooms(Long hotelId, Integer capacity, LocalDateTime checkInDate, LocalDateTime checkOutDate);
 }

@@ -49,15 +49,15 @@ VALUES ('A101', 'Phòng Đơn', 500000, 1, 'AVAILABLE', 'Phòng đơn tiện ngh
         'Phòng Deluxe với phòng tắm riêng và không gian nghỉ ngơi thư giãn.', 1);
 
 
-INSERT INTO bookings (user_id, room_id, check_in_date, check_out_date, status, payment_status, estimated_check_out_date,
+INSERT INTO bookings (user_id, check_in_date, check_out_date, status, payment_status, estimated_check_out_date,
                       note, deposit_amount, create_at, updated_at)
-VALUES (1, 1, '2024-10-01 14:00:00', '2024-10-05 12:00:00', 'CONFIRMED', 'PAID', '2024-10-05',
+VALUES (11, '2024-10-01 14:00:00', '2024-10-05 12:00:00', 'CONFIRMED', 'PAID', '2024-10-05',
         'Khách yêu cầu dọn phòng hàng ngày', 500000, '2024-10-01 09:00:00', '2024-10-01 09:00:00'),
-       (2, 2, '2024-10-02 15:00:00', '2024-10-07 11:00:00', 'PENDING', 'NOT_PAID', '2024-10-07',
+       (2, '2024-10-02 15:00:00', '2024-10-07 11:00:00', 'PENDING', 'NOT_PAID', '2024-10-07',
         'Khách đi du lịch cùng gia đình', 800000, '2024-10-02 10:00:00', '2024-10-02 10:00:00'),
-       (3, 3, '2024-10-03 13:00:00', '2024-10-04 10:00:00', 'CANCELLED', 'NOT_PAID', '2024-10-04',
+       (3, '2024-10-03 13:00:00', '2024-10-04 10:00:00', 'CANCELLED', 'NOT_PAID', '2024-10-04',
         'Khách hủy đặt phòng do bận công việc', 0, '2024-10-03 08:00:00', '2024-10-03 08:00:00'),
-       (1, 4, '2024-10-05 12:00:00', '2024-10-10 14:00:00', 'COMPLETED', 'PAID', '2024-10-10',
+       (1, '2024-10-05 12:00:00', '2024-10-10 14:00:00', 'COMPLETED', 'PAID', '2024-10-10',
         'Khách hàng rất hài lòng về dịch vụ', 2000000, '2024-10-05 09:00:00', '2024-10-10 09:00:00'),
-       (2, 5, '2024-10-06 16:00:00', '2024-10-08 11:00:00', 'CONFIRMED', 'PARTIALLY_PAID', '2024-10-08',
+       (2, '2024-10-06 16:00:00', '2024-10-08 11:00:00', 'CONFIRMED', 'PARTIALLY_PAID', '2024-10-08',
         'Khách đã thanh toán trước một phần', 1000000, '2024-10-06 11:00:00', '2024-10-06 11:00:00');

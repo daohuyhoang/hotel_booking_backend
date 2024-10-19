@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,8 +13,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingRequest {
-    private List<Long> roomId;
+public class BookingRequest implements Serializable {
+    private List<Long> roomIds;
     private LocalDateTime checkinDate;
     private LocalDateTime checkoutDate;
 }

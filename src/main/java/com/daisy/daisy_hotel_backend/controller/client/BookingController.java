@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/user/bookings")
@@ -21,8 +19,8 @@ public class BookingController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping
-    public ResponseEntity<List<Booking>> createBooking(@RequestBody BookingRequest bookingRequest) {
-        List<Booking> newBooking = bookingService.createBooking(bookingRequest);
+    public ResponseEntity<Booking> createBooking(@RequestBody BookingRequest bookingRequest) {
+        Booking newBooking = bookingService.createBooking(bookingRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(newBooking);
     }
 }

@@ -2,11 +2,14 @@ package com.daisy.daisy_hotel_backend.model;
 
 import com.daisy.daisy_hotel_backend.model.enums.RoomStatus;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "rooms")
 public class Room {

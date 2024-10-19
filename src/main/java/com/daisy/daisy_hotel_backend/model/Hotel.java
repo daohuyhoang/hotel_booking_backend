@@ -6,9 +6,12 @@ import lombok.*;
 
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "hotels")
-@Data
 public class Hotel {
 
     @Id

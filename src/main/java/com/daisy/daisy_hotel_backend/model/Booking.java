@@ -3,7 +3,7 @@ package com.daisy.daisy_hotel_backend.model;
 import com.daisy.daisy_hotel_backend.model.enums.BookingPaymentStatus;
 import com.daisy.daisy_hotel_backend.model.enums.BookingStatus;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,8 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "bookings")
@@ -27,9 +31,13 @@ public class Booking {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "booking_rooms",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id")
+    )
+    private List<Room> rooms;
 
     @Column(name ="check_in_date", nullable = false)
     private LocalDateTime checkInDate;

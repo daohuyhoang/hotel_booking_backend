@@ -16,7 +16,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "r.availabilityStatus = 'AVAILABLE' AND " +
             "(:capacity IS NULL OR r.capacity >= :capacity) AND " +
             "NOT EXISTS (SELECT 1 FROM Booking b " +
-            "            WHERE b.room.roomId = r.roomId AND " +
+            "            JOIN b.rooms br " +
+            "            WHERE br.roomId = r.roomId AND " +
             "                  b.checkInDate <= :checkoutDate AND b.checkOutDate >= :checkinDate)")
     List<Hotel> searchHotels(String cityId, Integer capacity, LocalDateTime checkinDate, LocalDateTime checkoutDate);
 
