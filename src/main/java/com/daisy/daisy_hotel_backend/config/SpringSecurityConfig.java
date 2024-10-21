@@ -40,6 +40,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authorize) -> {
                     // Các API công khai không yêu cầu xác thực
                     authorize.requestMatchers("/api/public/**", "/api/auth/**").permitAll();
+                    authorize.requestMatchers("/api/user/payment/vn-pay-callback").permitAll();
 
                     authorize.requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN");
 
