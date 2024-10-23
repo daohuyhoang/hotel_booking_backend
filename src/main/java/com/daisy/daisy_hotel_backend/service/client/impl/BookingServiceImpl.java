@@ -1,6 +1,7 @@
 package com.daisy.daisy_hotel_backend.service.client.impl;
 
 import com.daisy.daisy_hotel_backend.dto.request.BookingRequest;
+import com.daisy.daisy_hotel_backend.dto.response.BookingResponse;
 import com.daisy.daisy_hotel_backend.exception.ResourceNotFoundException;
 import com.daisy.daisy_hotel_backend.model.Booking;
 import com.daisy.daisy_hotel_backend.model.CustomUserDetail;
@@ -13,6 +14,7 @@ import com.daisy.daisy_hotel_backend.repository.RoomRepository;
 import com.daisy.daisy_hotel_backend.repository.UserRepository;
 import com.daisy.daisy_hotel_backend.service.client.BookingService;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
@@ -33,10 +35,13 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     @CacheEvict(value = "rooms", allEntries = true)
     @Transactional
-    public Booking createBooking(BookingRequest bookingRequest) {
+    public BookingResponse createBooking(BookingRequest bookingRequest) {
         User user = getUserByCustomUserDetail();
 
         List<Room> rooms = roomRepository.findAllById(bookingRequest.getRoomIds());
@@ -54,7 +59,9 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(BookingStatus.PENDING);
         booking.setPaymentStatus(BookingPaymentStatus.NOT_PAID);
 
-        return bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
+
+        return modelMapper.map(savedBooking, BookingResponse.class);
     }
 
     private void checkRoomBooked(BookingRequest bookingRequest, List<Room> rooms) {

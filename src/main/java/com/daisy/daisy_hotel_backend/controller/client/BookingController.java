@@ -1,7 +1,7 @@
 package com.daisy.daisy_hotel_backend.controller.client;
 
 import com.daisy.daisy_hotel_backend.dto.request.BookingRequest;
-import com.daisy.daisy_hotel_backend.model.Booking;
+import com.daisy.daisy_hotel_backend.dto.response.BookingResponse;
 import com.daisy.daisy_hotel_backend.service.client.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class BookingController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestBody BookingRequest bookingRequest) {
-        Booking newBooking = bookingService.createBooking(bookingRequest);
+    public ResponseEntity<BookingResponse> createBooking(@RequestBody BookingRequest bookingRequest) {
+        BookingResponse newBooking = bookingService.createBooking(bookingRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(newBooking);
     }
 }
