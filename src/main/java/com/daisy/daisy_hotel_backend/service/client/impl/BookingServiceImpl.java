@@ -37,9 +37,6 @@ public class BookingServiceImpl implements BookingService {
     private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private BookingMapper bookingMapper;
 
     @Override
