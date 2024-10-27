@@ -3,9 +3,12 @@ package com.daisy.daisy_hotel_backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "hotel_images")
-@Data
 public class HotelImage {
 
     @Id

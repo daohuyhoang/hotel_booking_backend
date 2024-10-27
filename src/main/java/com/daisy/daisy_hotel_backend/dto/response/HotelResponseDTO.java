@@ -5,16 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HotelResponseDTO {
-    private int hotelId;
+public class HotelResponseDTO implements Serializable {
+    private Long hotelId;
     private String name;
     private String address;
     private String phoneNumber;
-    private List<String> imageUrls;
+    private List<String> hotelImages;
 }

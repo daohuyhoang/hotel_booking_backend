@@ -3,6 +3,7 @@ package com.daisy.daisy_hotel_backend.service.admin.impl;
 import com.daisy.daisy_hotel_backend.dto.request.HotelCreateDTO;
 import com.daisy.daisy_hotel_backend.dto.response.HotelResponseDTO;
 import com.daisy.daisy_hotel_backend.exception.ResourceNotFoundException;
+import com.daisy.daisy_hotel_backend.mapper.HotelMapper;
 import com.daisy.daisy_hotel_backend.model.City;
 import com.daisy.daisy_hotel_backend.model.Hotel;
 import com.daisy.daisy_hotel_backend.model.HotelImage;
@@ -38,21 +39,15 @@ public class HotelAdminServiceImpl implements HotelAdminService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private HotelMapper hotelMapper;
+
     @Override
     public List<HotelResponseDTO> getAllHotels() {
         List<Hotel> hotels = hotelRepository.findHotelWithImages();
-        return hotels.stream().map(hotel -> {
-            HotelResponseDTO dto = modelMapper.map(hotel, HotelResponseDTO.class);
-
-            List<String> imageUrls = hotel.getHotelImages()
-                    .stream()
-                    .map(HotelImage::getImageUrl)
-                    .collect(Collectors.toList());
-
-            dto.setImageUrls(imageUrls);
-
-            return dto;
-        }).collect(Collectors.toList());
+        return hotels.stream()
+                .map(hotelMapper::hotelToHotelResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
