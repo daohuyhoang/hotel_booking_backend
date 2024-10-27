@@ -2,6 +2,8 @@ package com.daisy.daisy_hotel_backend.controller.client;
 
 import com.daisy.daisy_hotel_backend.dto.response.PaymentDTO;
 import com.daisy.daisy_hotel_backend.dto.response.ResponseObject;
+import com.daisy.daisy_hotel_backend.model.enums.BookingStatus;
+import com.daisy.daisy_hotel_backend.service.client.BookingService;
 import com.daisy.daisy_hotel_backend.service.client.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,9 @@ public class PaymentController {
     @Autowired
     private final PaymentService paymentService;
 
+    @Autowired
+    private final BookingService bookingService;
+
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/vn-pay")
     public ResponseObject<PaymentDTO.VNPayResponse> vnPay(@RequestParam Long bookingId, HttpServletRequest request) {
@@ -27,8 +32,12 @@ public class PaymentController {
 
     @GetMapping("/vn-pay-callback")
     public ResponseObject<PaymentDTO.VNPayResponse> payCallbackHandler(
-            @RequestParam("vnp_ResponseCode") String vnp_ResponseCode) {
+            @RequestParam("vnp_ResponseCode") String vnp_ResponseCode,
+            @RequestParam("vnp_TxnRef") String vnp_TxnRef) {
+        Long bookingId = Long.parseLong(vnp_TxnRef);
         if (vnp_ResponseCode.equals("00")) {
+//            paymentService.handlePaymentCallback(vnp_ResponseCode, bookingId);
+            bookingService.updateBookingStatus(bookingId, BookingStatus.COMPLETED);
             return new ResponseObject<>(HttpStatus.OK, "Success", PaymentDTO.VNPayResponse.builder()
                     .code("00")
                     .message("success")

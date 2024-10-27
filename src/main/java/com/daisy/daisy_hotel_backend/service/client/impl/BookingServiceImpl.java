@@ -15,7 +15,6 @@ import com.daisy.daisy_hotel_backend.repository.RoomRepository;
 import com.daisy.daisy_hotel_backend.repository.UserRepository;
 import com.daisy.daisy_hotel_backend.service.client.BookingService;
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
@@ -63,6 +62,14 @@ public class BookingServiceImpl implements BookingService {
         Booking savedBooking = bookingRepository.save(booking);
 
         return bookingMapper.toBookingResponse(savedBooking);
+    }
+
+    @Override
+    public void updateBookingStatus(Long bookingId, BookingStatus bookingStatus) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        booking.setStatus(bookingStatus);
+        bookingRepository.save(booking);
     }
 
     private void checkRoomBooked(BookingRequest bookingRequest, List<Room> rooms) {

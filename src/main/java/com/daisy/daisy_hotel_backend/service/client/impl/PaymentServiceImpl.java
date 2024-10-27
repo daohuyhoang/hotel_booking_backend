@@ -6,8 +6,12 @@ import com.daisy.daisy_hotel_backend.dto.response.PaymentDTO;
 import com.daisy.daisy_hotel_backend.exception.ResourceNotFoundException;
 import com.daisy.daisy_hotel_backend.mapper.BookingMapper;
 import com.daisy.daisy_hotel_backend.model.Booking;
+import com.daisy.daisy_hotel_backend.model.Payment;
 import com.daisy.daisy_hotel_backend.model.Room;
+import com.daisy.daisy_hotel_backend.model.enums.BookingStatus;
+import com.daisy.daisy_hotel_backend.model.enums.PaymentTransactionStatus;
 import com.daisy.daisy_hotel_backend.repository.BookingRepository;
+import com.daisy.daisy_hotel_backend.repository.PaymentRepository;
 import com.daisy.daisy_hotel_backend.repository.RoomRepository;
 import com.daisy.daisy_hotel_backend.service.client.PaymentService;
 import com.daisy.daisy_hotel_backend.util.VNPayUtil;
@@ -17,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +36,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
+
     @Override
     public PaymentDTO.VNPayResponse createVnPayPayment(Long bookingId, HttpServletRequest request) {
 
@@ -41,7 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
         BigDecimal amount = totalAmount(rooms);
 
         String bankCode = request.getParameter("bankCode");
-        Map<String, String> vnPayParams = vnPayConfig.getVNPayConfig();
+        Map<String, String> vnPayParams = vnPayConfig.getVNPayConfig(bookingId);
         vnPayParams.put("vnp_Amount", String.valueOf(amount.longValue()));
 
         if (bankCode != null && !bankCode.isEmpty()) {
@@ -59,6 +68,17 @@ public class PaymentServiceImpl implements PaymentService {
                 .code("ok")
                 .message("success")
                 .paymentUrl(paymentUrl).build();
+    }
+
+    @Override
+    public void handlePaymentCallback(String vnp_ResponseCode, Long bookingId) {
+        Payment payment = paymentRepository.findByBookingId(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found for bookingId: " + bookingId));
+
+        payment.setPaymentStatus(PaymentTransactionStatus.SUCCESS);
+        paymentRepository.save(payment);
+
+        bookingRepository.updateBookingStatus(bookingId, BookingStatus.COMPLETED);
     }
 
     private BigDecimal totalAmount(List<Room> rooms) {

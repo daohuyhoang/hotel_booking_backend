@@ -31,6 +31,10 @@ public class Payment {
     @Column(name = "payment_status", columnDefinition = "ENUM('PENDING', 'SUCCESS', 'FAILED') DEFAULT 'PENDING'")
     private PaymentTransactionStatus paymentStatus;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id", nullable = false)
+    private Booking booking;
+
     @CreatedDate
     @Column(name = "transaction_date", updatable = false)
     private LocalDateTime paymentDate;

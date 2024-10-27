@@ -5,4 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface PaymentService {
     PaymentDTO.VNPayResponse createVnPayPayment(Long bookingId, HttpServletRequest request);
+
+    void handlePaymentCallback(String vnp_ResponseCode, Long bookingId);
 }
