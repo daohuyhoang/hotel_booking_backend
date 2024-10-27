@@ -3,6 +3,7 @@ package com.daisy.daisy_hotel_backend.service.client.impl;
 import com.daisy.daisy_hotel_backend.dto.request.BookingRequest;
 import com.daisy.daisy_hotel_backend.dto.response.BookingResponse;
 import com.daisy.daisy_hotel_backend.exception.ResourceNotFoundException;
+import com.daisy.daisy_hotel_backend.mapper.BookingMapper;
 import com.daisy.daisy_hotel_backend.model.Booking;
 import com.daisy.daisy_hotel_backend.model.CustomUserDetail;
 import com.daisy.daisy_hotel_backend.model.Room;
@@ -38,6 +39,9 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private BookingMapper bookingMapper;
+
     @Override
     @CacheEvict(value = "rooms", allEntries = true)
     @Transactional
@@ -61,7 +65,7 @@ public class BookingServiceImpl implements BookingService {
 
         Booking savedBooking = bookingRepository.save(booking);
 
-        return modelMapper.map(savedBooking, BookingResponse.class);
+        return bookingMapper.toBookingResponse(savedBooking);
     }
 
     private void checkRoomBooked(BookingRequest bookingRequest, List<Room> rooms) {
