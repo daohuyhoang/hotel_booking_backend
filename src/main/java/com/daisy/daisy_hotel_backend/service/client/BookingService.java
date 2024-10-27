@@ -7,6 +7,4 @@ import com.daisy.daisy_hotel_backend.model.enums.BookingStatus;
 
 public interface BookingService {
     BookingResponse createBooking(BookingRequest bookingRequest);
-
-    void updateBookingStatus(Long bookingId, BookingStatus bookingStatus);
 }

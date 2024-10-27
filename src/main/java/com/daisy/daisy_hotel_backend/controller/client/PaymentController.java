@@ -36,8 +36,7 @@ public class PaymentController {
             @RequestParam("vnp_TxnRef") String vnp_TxnRef) {
         Long bookingId = Long.parseLong(vnp_TxnRef);
         if (vnp_ResponseCode.equals("00")) {
-//            paymentService.handlePaymentCallback(vnp_ResponseCode, bookingId);
-            bookingService.updateBookingStatus(bookingId, BookingStatus.COMPLETED);
+            paymentService.handlePaymentCallback(vnp_ResponseCode, bookingId);
             return new ResponseObject<>(HttpStatus.OK, "Success", PaymentDTO.VNPayResponse.builder()
                     .code("00")
                     .message("success")

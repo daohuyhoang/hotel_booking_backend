@@ -64,14 +64,6 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.toBookingResponse(savedBooking);
     }
 
-    @Override
-    public void updateBookingStatus(Long bookingId, BookingStatus bookingStatus) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
-        booking.setStatus(bookingStatus);
-        bookingRepository.save(booking);
-    }
-
     private void checkRoomBooked(BookingRequest bookingRequest, List<Room> rooms) {
         for (Room room : rooms) {
             boolean isRoomBooked = bookingRepository.isRoomBooked(room.getRoomId()

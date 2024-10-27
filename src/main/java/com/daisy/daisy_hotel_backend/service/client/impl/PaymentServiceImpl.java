@@ -7,10 +7,12 @@ import com.daisy.daisy_hotel_backend.exception.ResourceNotFoundException;
 import com.daisy.daisy_hotel_backend.mapper.BookingMapper;
 import com.daisy.daisy_hotel_backend.model.Booking;
 import com.daisy.daisy_hotel_backend.model.Payment;
+import com.daisy.daisy_hotel_backend.model.PaymentMethod;
 import com.daisy.daisy_hotel_backend.model.Room;
 import com.daisy.daisy_hotel_backend.model.enums.BookingStatus;
 import com.daisy.daisy_hotel_backend.model.enums.PaymentTransactionStatus;
 import com.daisy.daisy_hotel_backend.repository.BookingRepository;
+import com.daisy.daisy_hotel_backend.repository.PaymentMethodRepository;
 import com.daisy.daisy_hotel_backend.repository.PaymentRepository;
 import com.daisy.daisy_hotel_backend.repository.RoomRepository;
 import com.daisy.daisy_hotel_backend.service.client.PaymentService;
@@ -19,10 +21,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private PaymentMethodRepository paymentMethodRepository;
 
     @Override
     public PaymentDTO.VNPayResponse createVnPayPayment(Long bookingId, HttpServletRequest request) {
@@ -71,9 +75,20 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public void handlePaymentCallback(String vnp_ResponseCode, Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found for bookingId: " + bookingId));
+
         Payment payment = paymentRepository.findByBookingId(bookingId)
-                .orElseThrow(() -> new ResourceNotFoundException("Payment not found for bookingId: " + bookingId));
+                        .orElseGet(() -> {
+                           Payment newPayment = new Payment();
+                           newPayment.setBooking(booking);
+                           newPayment.setUser(booking.getUser());
+                           newPayment.setPaymentMethod(paymentMethodRepository.findById(1L).orElseThrow());
+                           newPayment.setPaymentStatus(PaymentTransactionStatus.PENDING);
+                           return newPayment;
+                        });
 
         payment.setPaymentStatus(PaymentTransactionStatus.SUCCESS);
         paymentRepository.save(payment);
