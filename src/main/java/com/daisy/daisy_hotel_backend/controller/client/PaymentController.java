@@ -21,8 +21,8 @@ public class PaymentController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/vn-pay")
-    public ResponseObject<PaymentDTO.VNPayResponse> vnPay(HttpServletRequest request) {
-        return new ResponseObject<>(HttpStatus.OK, "Success", paymentService.createVnPayPayment(request));
+    public ResponseObject<PaymentDTO.VNPayResponse> vnPay(@RequestParam Long bookingId, HttpServletRequest request) {
+        return new ResponseObject<>(HttpStatus.OK, "Success", paymentService.createVnPayPayment(bookingId, request));
     }
 
     @GetMapping("/vn-pay-callback")
